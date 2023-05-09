@@ -16,18 +16,11 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  plants: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Plant',
-    },
-  ],
   createdAt: {
     default: Date.now(),
     type: Date,
   },
   updatedAt: {
-    default: Date.now(),
     type: Date,
   },
 });

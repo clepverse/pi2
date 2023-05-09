@@ -23,6 +23,6 @@ PlantSchema.pre('save', async function (next) {
   return next();
 });
 
-const Plant = mongoose.model('Plant', PlantSchema);
+const Plant = mongoose.model('Plant', PlantSchema, 'plants');
 
 module.exports = Plant;
