@@ -6,11 +6,13 @@ const plantSchema = new Schema({
   popularName: {
     type: String,
     required: true,
+    trim: true,
   },
   scientificName: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
   care: {
     type: String,

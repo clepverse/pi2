@@ -7,21 +7,21 @@ PlantSchema.pre('save', function (next) {
   return next();
 });
 
-PlantSchema.pre('save', async function (next) {
-  const plant = this;
+// PlantSchema.pre('save', async function (next) {
+//   const plant = this;
 
-  const existingPlant = await Plant.findOne({
-    name: plant.name,
-    userId: plant.userId,
-  });
+//   const existingPlant = await Plant.findOne({
+//     name: plant.name,
+//     userId: plant.userId,
+//   });
 
-  if (existingPlant) {
-    const error = new Error('Você já tem uma planta com este nome');
-    return next(error);
-  }
+//   if (existingPlant) {
+//     const error = new Error('Você já tem uma planta com este nome');
+//     return next(error);
+//   }
 
-  return next();
-});
+//   return next();
+// });
 
 const Plant = mongoose.model('Plant', PlantSchema, 'plants');
 

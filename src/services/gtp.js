@@ -15,7 +15,7 @@ exports.popularName = async (plant) => {
     temperature: 0.9,
   });
   let anwser = completion.data.choices[0].text;
-  anwser = anwser.replace('.', '');
+  anwser = anwser.replace(/[.\/]/g, '');
   return anwser;
 };
 
@@ -27,7 +27,7 @@ exports.scientificName = async (plant) => {
     temperature: 0.9,
   });
   var anwser = completion.data.choices[0].text;
-  anwser = anwser.replace('.', '');
+  anwser = anwser.replace(/[\./]/g, '');
   return anwser;
 };
 
