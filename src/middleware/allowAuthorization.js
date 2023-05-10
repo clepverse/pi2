@@ -12,7 +12,17 @@ module.exports = (allow) => async (req, res, next) => {
     return res.status(401).json({ error: 'Token não fornecido' });
   }
 
-  const [, token] = authHeader.split(' ');
+  const parts = authHeader.split(' ');
+
+  if (!parts.length === 2) {
+    return res.status(401).json({ error: 'Token error' });
+  }
+
+  const [scheme, token] = parts;
+
+  if (!/^Bearer$/i.test(scheme)) {
+    return res.status(401).json({ error: 'Token mal formatado' });
+  }
 
   try {
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET).catch(
@@ -26,6 +36,8 @@ module.exports = (allow) => async (req, res, next) => {
 
     return next();
   } catch (err) {
-    return res.status(401).json({ error: 'Token inválido' });
+    return res.status(401).json({
+      error: err.message ? err.message : 'Erro ao verificar token',
+    });
   }
 };

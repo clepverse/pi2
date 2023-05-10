@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 
 const PlantSaveSchema = require('../schemas/PlantSaveSchema');
 
-PlantSaveSchema.pre(['save', 'findOneAndUpdate'], function (next) {
-  this.updatedAt = Date.now();
-  return next();
+PlantSaveSchema.pre(['findOneAndUpdate'], function (next) {
+  this.findeOneAndUpdate({}, { updatedAt: new Date() }).exec(() => {
+    next();
+  });
 });
 
 const PlantSave = mongoose.model('PlantSave', PlantSaveSchema, 'plantsaves');

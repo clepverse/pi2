@@ -1,10 +1,10 @@
 const express = require('express');
-const isAuthenticated = require('../middlewares/isAuthenticated');
+const allowAuthorization = require('../middleware/allowAuthorization');
 const { index, create } = require('../controllers/PlantController');
 
 const plantRouter = express.Router();
 
-plantRouter.get('/plant', isAuthenticated(false), index);
-plantRouter.post('/plant', isAuthenticated(false), create);
+plantRouter.get('/plant', allowAuthorization(false), index);
+plantRouter.post('/plant', allowAuthorization(false), create);
 
 module.exports = plantRouter;
