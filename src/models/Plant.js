@@ -15,20 +15,20 @@ PlantSchema.post('save', function ({ name, code }, _, next) {
   }
 });
 
-PlantSchema.pre('save', async function (next) {
-  const plant = this;
+// PlantSchema.pre('save', async function (next) {
+//   const plant = this;
 
-  const existingPlant = await Plant.findOne({
-    name: plant.name,
-  });
+//   const existingPlant = await Plant.findOne({
+//     name: plant.name,
+//   });
 
-  if (existingPlant) {
-    const error = new Error('Já existe uma planta com este nome');
-    return next(error);
-  }
+//   if (existingPlant) {
+//     const error = new Error('Já existe uma planta com este nome');
+//     return next(error);
+//   }
 
-  return next();
-});
+//   return next();
+// });
 
 const Plant = mongoose.model('Plant', PlantSchema, 'plants');
 

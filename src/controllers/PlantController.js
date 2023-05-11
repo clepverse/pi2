@@ -46,12 +46,14 @@ exports.create = async (req, res) => {
   const { namePlant, nickName, dateOfPurchase } = req.body;
 
   //chat gpt
-  const popularNameResult = await popularName(namePlant);
-  const scientificNameResult = await scientificName(namePlant);
-  const careResult = await howToCare(namePlant);
 
   try {
+    const scientificNameResult = await scientificName(namePlant);
+
     const plantExists = await Plant.findOne({ scientificName });
+
+    const popularNameResult = await popularName(namePlant);
+    const careResult = await howToCare(namePlant);
 
     if (!plantExists) {
       const plant = await Plant.create({
