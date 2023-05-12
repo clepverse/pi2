@@ -5,17 +5,16 @@ const jwt = require('jsonwebtoken');
 const UserSchema = require('../schemas/UserSchema');
 
 UserSchema.pre('findOneAndUpdate', function (next) {
-  this.updateMany({}, { updatedAt: new Date() }).exec(() => {
-    next();
-  });
+  this.updatedAt = new Date();
+  next();
 });
 
 UserSchema.post('save', function ({ name, code }, _, next) {
   if (name === 'MongoServerError' && code === 11000) {
     next(new Error('Usuário já cadastrado'));
-  } else {
-    next();
   }
+
+  next();
 });
 
 UserSchema.pre('save', async function (next) {

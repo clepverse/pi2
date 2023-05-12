@@ -45,8 +45,6 @@ exports.create = async (req, res) => {
 
   const { namePlant, nickName, dateOfPurchase } = req.body;
 
-  //chat gpt
-
   try {
     const scientificNameResult = await scientificName(namePlant);
 

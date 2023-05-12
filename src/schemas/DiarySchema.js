@@ -2,14 +2,17 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const CalendarSchema = new Schema({
-  plantSaveId: {
-    type: Schema.Types.ObjectId,
-    ref: 'PlantSave',
+const DiaryEntrySchema = new Schema({
+  day: {
+    type: Number,
     required: true,
   },
-  day: {
-    type: Date,
+  month: {
+    type: Number,
+    required: true,
+  },
+  year: {
+    type: Number,
     required: true,
   },
   description: {
@@ -25,4 +28,4 @@ const CalendarSchema = new Schema({
   },
 });
 
-module.exports = CalendarSchema;
+module.exports = DiaryEntrySchema;

@@ -23,13 +23,27 @@ exports.index = async (req, res) => {
         $unwind: '$plants',
       },
       {
+        $lookup: {
+          from: 'diaryentries',
+          localField: 'diaryEntriesId',
+          foreignField: '_id',
+          as: 'diaryEntries',
+        },
+      },
+      // {
+      //   $unwind: {
+      //     path: '$diaryEntries',
+      //   },
+      // },
+      {
         $project: {
-          _id: '$plants._id',
+          _id: 1,
           popularName: '$plants.popularName',
           scientificName: '$plants.scientificName',
           nickName: '$nickName',
           dateOfPurchase: '$dateOfPurchase',
           care: '$plants.care',
+          diaryEntries: '$diaryEntries',
         },
       },
     ]);

@@ -15,7 +15,7 @@ module.exports = (allow) => async (req, res, next) => {
   const parts = authHeader.split(' ');
 
   if (!parts.length === 2) {
-    return res.status(401).json({ error: 'Token error' });
+    return res.status(401).json({ error: 'Tipo de token inválido' });
   }
 
   const [scheme, token] = parts;
@@ -25,14 +25,11 @@ module.exports = (allow) => async (req, res, next) => {
   }
 
   try {
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET).catch(
-      (err) => {
-        throw new Error({
-          message: err.message ? err.message : 'Erro ao verificar token',
-        });
-      },
-    );
-    req.userId = decoded.id;
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+      .then((decoded) => (req.userId = decoded.id))
+      .catch(() => {
+        throw new Error('Token inválido');
+      });
 
     return next();
   } catch (err) {

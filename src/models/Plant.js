@@ -2,17 +2,17 @@ const mongoose = require('mongoose');
 
 const PlantSchema = require('../schemas/PlantSchema');
 
-PlantSchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
-  return next();
+PlantSchema.pre('findOneAndUpdate', function (next) {
+  this.updatedAt = new Date();
+  next();
 });
 
 PlantSchema.post('save', function ({ name, code }, _, next) {
   if (name === 'MongoServerError' && code === 11000) {
     next(new Error('Planta já cadastrada'));
-  } else {
-    next();
   }
+
+  next();
 });
 
 // PlantSchema.pre('save', async function (next) {

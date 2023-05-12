@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const DiaryEntrySchema = require('./DiarySchema');
+
 const { Schema } = mongoose;
 
 const PlantSaveSchema = new Schema({
@@ -24,6 +26,12 @@ const PlantSaveSchema = new Schema({
   updatedAt: {
     type: Date,
   },
+  diaryEntriesId: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'DiaryEntry',
+    },
+  ],
 });
 
 module.exports = PlantSaveSchema;

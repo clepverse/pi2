@@ -1,5 +1,5 @@
 const express = require('express');
-const allowAuthorization = require('../middleware/allowAuthorization');
+const allowAuthorization = require('../middlewares/allowAuthorization');
 const { index } = require('../controllers/PlantSaveController');
 
 const plantSaveRouter = express.Router();
