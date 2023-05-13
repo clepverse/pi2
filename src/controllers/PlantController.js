@@ -30,33 +30,41 @@ exports.create = async (req, res) => {
       });
     }
 
+    if (!namePlant || typeof namePlant !== 'string') {
+      return res.status(400).json({
+        message: 'Nome da planta inválido',
+      });
+    }
+
     const scientificNameResult = await scientificName(namePlant);
 
-    const plantExists = await Plant.findOne({
-      scientificName,
+    const plant = await Plant.findOne({
+      scientificName: scientificNameResult,
     });
 
-    if (!plantExists) {
+    if (!plant) {
       const popularNameResult = await popularName(namePlant);
       const careResult = await howToCare(namePlant);
 
-      const plant = await Plant.create({
+      const newPlant = new Plant({
         popularName: popularNameResult,
         scientificName: scientificNameResult,
         care: careResult,
       });
 
+      await newPlant.save();
+
       const plantSave = await PlantSave.create({
         nickName,
         dateOfPurchase,
         userId,
-        plantId: plant._id,
+        plantId: newPlant._id,
       });
 
       return res.status(201).json({
         message: 'Planta cadastrada com sucesso!',
         plantSave,
-        plant,
+        plant: newPlant,
       });
     }
 
@@ -64,15 +72,17 @@ exports.create = async (req, res) => {
       nickName,
       dateOfPurchase,
       userId,
-      plantId: plantExists._id,
+      plantId: plant._id,
     });
 
     return res.status(201).json({
       message: 'Planta cadastrada com sucesso!',
       plantSave,
+      plant,
     });
   } catch (err) {
-    const message = err.message ? err.message : 'Erro ao cadastrar planta';
+    const message = err.message ? err.message : 'Erro ao criar planta';
+
     return res.status(500).json({
       message,
     });

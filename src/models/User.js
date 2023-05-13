@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const UserSchema = require('../schemas/UserSchema');
 
 UserSchema.pre('findOneAndUpdate', function (next) {
-  this.updatedAt = new Date();
+  this.findOneAndUpdate({}, { $set: { updatedAt: new Date() } });
 
   next();
 });

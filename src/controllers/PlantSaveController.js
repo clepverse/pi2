@@ -122,8 +122,6 @@ exports.edit = async (req, res) => {
   const { id } = req.params;
   const { diaryEntries, ...plantSaveData } = req.body;
 
-  console.log({ userId, id, plantSaveData });
-
   try {
     if (!isValidObjectId(userId)) {
       return res.status(400).json({ message: 'Id inválido' });
@@ -133,7 +131,7 @@ exports.edit = async (req, res) => {
       return res.status(400).json({ message: 'Id inválido' });
     }
 
-    const diaryEntriesData = await DiaryEntry.upsertMany(diaryEntries).then(
+    const diaryEntriesId = await DiaryEntry.upsertMany(id, diaryEntries).then(
       (updatedEntries) => {
         return updatedEntries;
       },
@@ -149,7 +147,7 @@ exports.edit = async (req, res) => {
           nickName: plantSaveData.nickName,
           dateOfPurchase: plantSaveData.dateOfPurchase,
         },
-        $push: { diaryEntriesId: diaryEntriesData },
+        $addToSet: { diaryEntriesId: { $each: diaryEntriesId } },
       },
       { new: true },
     );

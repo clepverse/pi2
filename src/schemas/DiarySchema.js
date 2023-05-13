@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const DiaryEntrySchema = new Schema({
+  plantSaveId: {
+    type: Schema.Types.ObjectId,
+    ref: 'PlantSave',
+    required: true,
+  },
   day: {
     type: String,
     required: true,

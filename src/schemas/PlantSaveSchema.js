@@ -18,6 +18,7 @@ const PlantSaveSchema = new Schema({
   plantId: {
     type: Schema.Types.ObjectId,
     ref: 'Plant',
+    unique: true,
   },
   createdAt: {
     default: Date.now(),

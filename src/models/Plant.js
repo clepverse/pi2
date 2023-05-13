@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const PlantSchema = require('../schemas/PlantSchema');
 
 PlantSchema.pre('findOneAndUpdate', function (next) {
-  this.updatedAt = new Date();
+  this.findOneAndUpdate({}, { $set: { updatedAt: new Date() } });
+
   next();
 });
 
