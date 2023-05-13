@@ -4,15 +4,15 @@ const { Schema } = mongoose;
 
 const DiaryEntrySchema = new Schema({
   day: {
-    type: Number,
+    type: String,
     required: true,
   },
   month: {
-    type: Number,
+    type: String,
     required: true,
   },
   year: {
-    type: Number,
+    type: String,
     required: true,
   },
   description: {

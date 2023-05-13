@@ -31,6 +31,22 @@ DiaryEntrySchema.pre('save', async function (next) {
   return next();
 });
 
-const DiaryEntry = mongoose.model('DiaryEntry', DiaryEntrySchema, 'diaryentries');
+DiaryEntrySchema.statics.upsertMany = async function (entries) {
+  const promises = entries.map((entry) =>
+    this.findOneAndUpdate(
+      { day: entry.day, month: entry.month, year: entry.year },
+      { description: entry.description },
+      { new: true, upsert: true },
+    ).then(({ _id }) => _id),
+  );
+
+  return await Promise.all(promises);
+};
+
+const DiaryEntry = mongoose.model(
+  'DiaryEntry',
+  DiaryEntrySchema,
+  'diaryentries',
+);
 
 module.exports = DiaryEntry;

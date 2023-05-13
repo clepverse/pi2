@@ -40,6 +40,8 @@ exports.login = async (req, res) => {
 
     const token = user.generateToken({ setExpiresIn: '1d' });
 
+    user.password = undefined;
+
     return res.status(200).json({ user, token });
   } catch (err) {
     const message = err.message ? err.message : 'Usuário e senha inválidos';
@@ -59,7 +61,10 @@ exports.me = async (req, res) => {
       password: 0,
     });
 
-    const plantSaves = await PlantSave.find({ userId: new Types.ObjectId(userId) }, {});
+    const plantSaves = await PlantSave.find(
+      { userId: new Types.ObjectId(userId) },
+      {},
+    );
 
     return res.status(200).json({ user, plantSaves });
   } catch (error) {

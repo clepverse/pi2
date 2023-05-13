@@ -6,6 +6,7 @@ const UserSchema = require('../schemas/UserSchema');
 
 UserSchema.pre('findOneAndUpdate', function (next) {
   this.updatedAt = new Date();
+
   next();
 });
 
@@ -19,9 +20,11 @@ UserSchema.post('save', function ({ name, code }, _, next) {
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password_hash')) return next();
+
   try {
     const hash = await bcrypt.hash(this.password_hash, 10);
     this.password_hash = hash;
+
     next();
   } catch (error) {
     next(error);
@@ -31,9 +34,15 @@ UserSchema.pre('save', async function (next) {
 UserSchema.statics.findByCredentials = async function (email, password) {
   try {
     const user = await this.findOne({ email });
-    if (!user) throw new Error('Usuário e senha inválidos');
+
+    if (!user) {
+      throw new Error('Usuário e senha inválidos');
+    }
     const match = await bcrypt.compare(password, user.password);
-    if (!match) throw new Error('Usuário e senha inválidos');
+    if (!match) {
+      throw new Error('Usuário e senha inválidos');
+    }
+
     return user;
   } catch (error) {
     throw new Error(error);
@@ -43,6 +52,7 @@ UserSchema.statics.findByCredentials = async function (email, password) {
 UserSchema.methods.compareHash = async function (password) {
   try {
     const match = await bcrypt.compare(password, this.password_hash || '');
+
     return match;
   } catch (error) {
     throw new Error(error);
@@ -51,6 +61,7 @@ UserSchema.methods.compareHash = async function (password) {
 
 UserSchema.methods.generateToken = function ({ setExpiresIn }) {
   const { id } = this;
+
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: setExpiresIn ? setExpiresIn : '1d',
   });

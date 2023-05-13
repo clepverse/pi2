@@ -2,7 +2,6 @@ const { Types, isValidObjectId } = require('mongoose');
 
 const { popularName, scientificName, howToCare } = require('../services/gtp');
 
-const User = require('../models/User');
 const Plant = require('../models/Plant');
 const PlantSave = require('../models/PlantSave');
 
@@ -74,50 +73,6 @@ exports.create = async (req, res) => {
     });
   } catch (err) {
     const message = err.message ? err.message : 'Erro ao cadastrar planta';
-    return res.status(500).json({
-      message,
-    });
-  }
-};
-
-exports.edit = async (req, res) => {
-  const { userId } = req;
-  const { nickName, dateOfPurchase } = req.body;
-
-  if (!isValidObjectId(userId)) {
-    return res.status(400).json({
-      message: 'Id do usuário inválido',
-    });
-  }
-
-  try {
-    const plantSave = await PlantSave.findOne({
-      userId,
-    });
-
-    if (!plantSave) {
-      return res.status(400).json({
-        message: 'Planta não encontrada',
-      });
-    }
-
-    const plantSaveUpdated = await PlantSave.findByIdAndUpdate(
-      plantSave._id,
-      {
-        nickName,
-        dateOfPurchase,
-      },
-      {
-        new: true,
-      },
-    );
-
-    return res.status(200).json({
-      message: 'Planta atualizada com sucesso!',
-      plantSaveUpdated,
-    });
-  } catch (err) {
-    const message = err.message ? err.message : 'Erro ao atualizar planta';
     return res.status(500).json({
       message,
     });
