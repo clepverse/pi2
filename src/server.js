@@ -1,28 +1,23 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const database = require('./connect/database');
 const express = require('express');
 const routes = require('./routes');
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.use(routes);
 
-dotenv.config({ path: './.env' });
-
-const DB = process.env.DATABASE_CONNECTION_STRING.replace(
-  '<PASSWORD>',
-  process.env.DATABASE_PASSWORD,
-);
-
-mongoose.connect(DB, {}).then((con) => {
-  // console.log(con.connections);
-  console.log('DB connection successful!');
-});
-
 const port = process.env.PORT || 3333;
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+database.once('open', () => {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+});
+
+database.on('error', (error) => {
+  console.error('Error connecting to database', error);
 });

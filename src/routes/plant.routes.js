@@ -4,7 +4,7 @@ const { index, create } = require('../controllers/PlantController');
 
 const plantRouter = express.Router();
 
-plantRouter.get('/plant', allowAuthorization(false), index);
-plantRouter.post('/plant', allowAuthorization(false), create);
+plantRouter.get('/', allowAuthorization(false), index);
+plantRouter.post('/', allowAuthorization(false), create);
 
 module.exports = plantRouter;

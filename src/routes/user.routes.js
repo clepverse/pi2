@@ -1,9 +1,11 @@
 const express = require('express');
-const { index, create } = require('../controllers/UserController');
+const allowAuthorization = require('../middlewares/allowAuthorization');
+const { index, create, login, me } = require('../controllers/UserController');
 
 const userRouter = express.Router();
 
-userRouter.get(index);
-userRouter.post('/user', create);
+userRouter.post('/signup', create);
+userRouter.post('/login', login);
+userRouter.get('/me', allowAuthorization(false), me);
 
 module.exports = userRouter;

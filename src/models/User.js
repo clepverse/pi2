@@ -28,6 +28,18 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
+UserSchema.statics.findByCredentials = async function (email, password) {
+  try {
+    const user = await this.findOne({ email });
+    if (!user) throw new Error('Usuário e senha inválidos');
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) throw new Error('Usuário e senha inválidos');
+    return user;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 UserSchema.methods.compareHash = async function (password) {
   try {
     const match = await bcrypt.compare(password, this.password_hash || '');

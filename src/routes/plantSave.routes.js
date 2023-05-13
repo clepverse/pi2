@@ -4,7 +4,6 @@ const { index } = require('../controllers/PlantSaveController');
 
 const plantSaveRouter = express.Router();
 
-plantSaveRouter.get('/plantsave', allowAuthorization(false), index);
-// plantSaveRouter.post('/plant', allowAuthorization(false), create);
+plantSaveRouter.get('/', allowAuthorization(false), index);
 
 module.exports = plantSaveRouter;
