@@ -1,8 +1,6 @@
-const { Types, isValidObjectId } = require('mongoose');
+const { isValidObjectId } = require('mongoose');
 
 const Queue = require('../lib/Queue');
-
-const { popularName, scientificName, howToCare } = require('../services/gtp');
 
 const Plant = require('../models/Plant');
 const PlantSave = require('../models/PlantSave');
