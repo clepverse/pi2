@@ -1,5 +1,7 @@
 const { Types, isValidObjectId } = require('mongoose');
 
+const Queue = require('../lib/Queue');
+
 const { popularName, scientificName, howToCare } = require('../services/gtp');
 
 const Plant = require('../models/Plant');
@@ -36,15 +38,22 @@ exports.create = async (req, res) => {
       });
     }
 
-    const scientificNameResult = await scientificName(namePlant);
+    const scientificNameResult = await Queue.add('SearchScientificName', {
+      namePlant,
+    }).then((job) => job.finished().then((result) => result));
 
     const plant = await Plant.findOne({
       scientificName: scientificNameResult,
     });
 
     if (!plant) {
-      const popularNameResult = await popularName(namePlant);
-      const careResult = await howToCare(namePlant);
+      const popularNameResult = await Queue.add('SearchPopularName', {
+        namePlant,
+      }).then((job) => job.finished().then((result) => result));
+
+      const careResult = await Queue.add('SearchHowToCare', {
+        namePlant,
+      }).then((job) => job.finished().then((result) => result));
 
       const newPlant = new Plant({
         popularName: popularNameResult,
