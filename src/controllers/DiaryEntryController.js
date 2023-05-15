@@ -1,7 +1,11 @@
-const { Types, isValidObjectId } = require('mongoose');
+const { isValidObjectId } = require('mongoose');
+
+const yup = require('yup');
 
 const PlantSave = require('../models/PlantSave');
 const DiaryEntry = require('../models/DiaryEntry');
+
+const createDiaryEntryValidator = require('../Validations/DiaryEntry/createDiaryEntryValidator');
 
 exports.index = async (req, res) => {
   const { plantId } = req.params;
@@ -20,64 +24,79 @@ exports.index = async (req, res) => {
   }
 };
 
-// exports.create = async (req, res) => {
-//   const { plantId, day, month, year, description } = req.body;
+exports.save = async (req, res) => {
+  const { plantId } = req.params;
+  const data = req.body;
 
-//   try {
-//     if (!isValidObjectId(plantId)) {
-//       return res.status(400).json({ message: 'ID de planta inválido.' });
-//     }
+  try {
+    if (!isValidObjectId(plantId)) {
+      return res.status(400).json({ message: 'ID de planta inválido.' });
+    }
 
-//     const diaryEntry = new DiaryEntry({
-//       day,
-//       month,
-//       year,
-//       description,
-//     });
+    const diaryEntrySchema = yup.object().shape(createDiaryEntryValidator);
 
-//     const savedDiaryEntry = await diaryEntry.save();
+    const diaryEntryValidated = await diaryEntrySchema.validate(data);
 
-//     const updatedPlant = await PlantSave.findOneAndUpdate(
-//       { _id: plantId },
-//       { $push: { diaryEntriesId: savedDiaryEntry._id } },
-//       { new: true },
-//     );
+    const diaryEntryId = await DiaryEntry.upsertOne(
+      plantId,
+      diaryEntryValidated,
+    ).then((entryId) => {
+      return entryId;
+    });
 
-//     res.json(updatedPlant);
-//   } catch (err) {
-//     console.error(err);
+    const updatedPlant = await PlantSave.findOneAndUpdate(
+      { _id: plantId },
+      { $addToSet: { diaryEntriesId: diaryEntryId } },
+      { new: true },
+    );
 
-//     res.status(500).json({
-//       error: err ? err.message : 'Erro ao criar entrada de diário.',
-//     });
-//   }
-// };
+    res.json(updatedPlant);
+  } catch (err) {
+    console.error(err);
 
-// exports.edit = async (req, res) => {
-//   const { plantId, diaryEntryId } = req.params;
-//   const { day, month, year, description } = req.body;
+    res.status(500).json({
+      error: err ? err.message : 'Erro ao criar entrada de diário.',
+    });
+  }
+};
 
-//   try {
-//     if (!isValidObjectId(plantId)) {
-//       return res.status(400).json({ message: 'ID de planta inválido.' });
-//     }
+exports.delete = async (req, res) => {
+  const { plantId } = req.params;
+  const { diaryEntryId } = req.body;
 
-//     if (!isValidObjectId(diaryEntryId)) {
-//       return res.status(400).json({ message: 'ID de entrada de diário inválido.' });
-//     }
+  try {
+    if (!isValidObjectId(plantId)) {
+      return res.status(400).json({ message: 'ID de planta inválido.' });
+    }
 
-//     const updatedDiaryEntry = await DiaryEntry.findOneAndUpdate(
-//       { _id: diaryEntryId },
-//       { day, month, year, description },
-//       { new: true },
-//     );
+    if (!isValidObjectId(diaryEntryId)) {
+      return res
+        .status(400)
+        .json({ message: 'ID de entrada de diário inválido.' });
+    }
 
-//     res.json(updatedDiaryEntry);
-//   } catch (err) {
-//     const message = err.message ? err.message : 'Erro ao editar entrada de diário.';
+    const deletedDiaryEntry = await DiaryEntry.findOneAndDelete({
+      _id: diaryEntryId,
+    });
 
-//     res.status(500).json({
-//       message,
-//     });
-//   }
-// };
+    if (!deletedDiaryEntry) {
+      return res
+        .status(400)
+        .json({ message: 'Entrada de diário não encontrada.' });
+    }
+
+    const updatedPlant = await PlantSave.findOneAndUpdate(
+      { _id: plantId },
+      { $pull: { diaryEntriesId: diaryEntryId } },
+      { new: true },
+    );
+
+    res.json(updatedPlant);
+  } catch (err) {
+    const message = err ? err.message : 'Erro ao deletar entrada de diário.';
+
+    res.status(500).json({
+      message,
+    });
+  }
+};

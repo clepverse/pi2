@@ -8,20 +8,12 @@ const DiaryEntrySchema = new Schema({
     ref: 'PlantSave',
     required: true,
   },
-  day: {
+  title: {
     type: String,
     required: true,
   },
-  month: {
-    type: String,
-    required: true,
-  },
-  year: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
+  date: {
+    type: Date,
     required: true,
   },
   createdAt: {

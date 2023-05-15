@@ -9,6 +9,6 @@ const routes = express.Router();
 routes.use('/api/user', userRouter);
 routes.use('/api/plant/', plantRouter);
 routes.use('/api/save/', plantSaveRouter);
-routes.use('/api/save/', diaryEntryRouter);
+routes.use('/api/diary/', diaryEntryRouter);
 
 module.exports = routes;

@@ -1,9 +1,14 @@
 const { isValidObjectId } = require('mongoose');
 
+const yup = require('yup');
+
 const Queue = require('../lib/Queue');
 
 const Plant = require('../models/Plant');
 const PlantSave = require('../models/PlantSave');
+
+const createPlantValidator = require('../Validations/Plant/createPlantValidator');
+const createPlantSaveValidator = require('../Validations/PlantSave/createPlantSaveValidator');
 
 exports.index = async (req, res) => {
   try {
@@ -21,7 +26,7 @@ exports.index = async (req, res) => {
 
 exports.create = async (req, res) => {
   const { userId } = req;
-  const { namePlant, nickName, dateOfPurchase } = req.body;
+  const data = req.body;
 
   try {
     if (!isValidObjectId(userId)) {
@@ -30,11 +35,11 @@ exports.create = async (req, res) => {
       });
     }
 
-    if (!namePlant || typeof namePlant !== 'string') {
-      return res.status(400).json({
-        message: 'Nome da planta inválido',
-      });
-    }
+    const dataSchema = yup.object().shape(createPlantValidator);
+
+    const dataValidated = await dataSchema.validate(data);
+
+    const { namePlant, nickName, dateOfPurchase } = dataValidated;
 
     const scientificNameResult = await Queue.add('SearchScientificName', {
       namePlant,
@@ -61,12 +66,16 @@ exports.create = async (req, res) => {
 
       await newPlant.save();
 
-      const plantSave = await PlantSave.create({
+      const dataSaveSchema = yup.object().shape(createPlantSaveValidator);
+
+      const dataSaveValidated = await dataSaveSchema.validate({
         nickName,
         dateOfPurchase,
         userId,
         plantId: newPlant._id,
       });
+
+      const plantSave = await PlantSave.create(dataSaveValidated);
 
       return res.status(201).json({
         message: 'Planta cadastrada com sucesso!',
@@ -75,12 +84,16 @@ exports.create = async (req, res) => {
       });
     }
 
-    const plantSave = await PlantSave.create({
+    const dataSaveSchema = yup.object().shape(createPlantSaveValidator);
+
+    const dataSaveValidated = await dataSaveSchema.validate({
       nickName,
       dateOfPurchase,
       userId,
       plantId: plant._id,
     });
+
+    const plantSave = await PlantSave.create(dataSaveValidated);
 
     return res.status(201).json({
       message: 'Planta cadastrada com sucesso!',

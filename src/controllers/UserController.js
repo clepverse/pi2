@@ -1,9 +1,14 @@
 const { Types, isValidObjectId } = require('mongoose');
 
 const bcrypt = require('bcrypt');
+const yup = require('yup');
 
 const User = require('../models/User');
 const PlantSave = require('../models/PlantSave');
+
+const createUserValidator = require('../Validations/User/createUserValidator');
+const loginUserValidator = require('../Validations/User/loginUserValidator');
+const editUserValidator = require('../Validations/User/editUserValidator');
 
 exports.index = async (req, res) => {
   try {
@@ -19,9 +24,15 @@ exports.index = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  const { name, email, password } = req.body;
+  const data = req.body;
 
   try {
+    const dataSchema = yup.object().shape(createUserValidator);
+
+    const dataValidated = await dataSchema.validate(data);
+
+    const { name, email, password } = dataValidated;
+
     const password_hash = await bcrypt.hash(password, 8);
 
     const user = await User.create({ name, email, password: password_hash });
@@ -33,9 +44,15 @@ exports.create = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  const data = req.body;
 
   try {
+    const dataSchema = yup.object().shape(loginUserValidator);
+
+    const dataValidated = await dataSchema.validate(data);
+
+    const { email, password } = dataValidated;
+
     const user = await User.findByCredentials(email, password);
 
     const token = user.generateToken({ setExpiresIn: '1d' });
@@ -66,6 +83,10 @@ exports.me = async (req, res) => {
       {},
     );
 
+    if (!user || !plantSaves) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+
     return res.status(200).json({ user, plantSaves });
   } catch (error) {
     const message = error.message ? error.message : 'Erro ao buscar usuário';
@@ -75,12 +96,18 @@ exports.me = async (req, res) => {
 
 exports.edit = async (req, res) => {
   const { userId } = req;
-  const { name, email, password } = req.body;
+  const data = req.body;
 
   try {
     if (!isValidObjectId(userId)) {
       return res.status(400).json({ message: 'ID de usuário inválido.' });
     }
+
+    const dataSchema = yup.object().shape(editUserValidator);
+
+    const dataValidated = await dataSchema.validate(data);
+
+    const { name, email, password } = dataValidated;
 
     const user = await User.findById(userId);
 

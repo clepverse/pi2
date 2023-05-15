@@ -3,7 +3,7 @@ const { scientificName } = require('../services/gtp');
 module.exports = {
   key: 'SearchScientificName',
   options: {
-    delay: 1000,
+    delay: 500,
     attempts: 5,
   },
   async handle({ data }) {

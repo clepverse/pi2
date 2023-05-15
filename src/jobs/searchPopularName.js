@@ -3,7 +3,7 @@ const { popularName } = require('../services/gtp');
 module.exports = {
   key: 'SearchPopularName',
   options: {
-    delay: 1000,
+    delay: 500,
     attempts: 5,
   },
   async handle({ data }) {
