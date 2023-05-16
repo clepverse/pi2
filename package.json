@@ -2,7 +2,7 @@
   "name": "backend-clep",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/server.js",
   "scripts": {
     "server:start": "nodemon src/server.js",
     "queue:start": "nodemon src/queue.js",
