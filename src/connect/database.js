@@ -1,4 +1,4 @@
-const DB = require('../config/db');
+const DB = require('../configs/db');
 
 const mongoose = require('mongoose');
 
@@ -7,10 +7,10 @@ mongoose
     useNewUrlParser: true,
   })
   .then(() => {
-    console.log('Database conectado com sucesso!');
+    console.log('DB conectado com sucesso!');
   })
   .catch((error) => {
-    console.error('Erro ao conectar com a database', error);
+    console.error('Erro ao conectar com a DB', error);
   });
 
 module.exports = mongoose.connection;

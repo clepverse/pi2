@@ -6,9 +6,9 @@ const yup = require('yup');
 const User = require('../models/User');
 const PlantSave = require('../models/PlantSave');
 
-const createUserValidator = require('../Validations/User/createUserValidator');
-const loginUserValidator = require('../Validations/User/loginUserValidator');
-const editUserValidator = require('../Validations/User/editUserValidator');
+const createUserValidator = require('../validators/User/createUserValidator');
+const loginUserValidator = require('../validators/User/loginUserValidator');
+const editUserValidator = require('../validators/User/editUserValidator');
 
 exports.index = async (req, res) => {
   try {
@@ -78,10 +78,7 @@ exports.me = async (req, res) => {
       password: 0,
     });
 
-    const plantSaves = await PlantSave.find(
-      { userId: new Types.ObjectId(userId) },
-      {},
-    );
+    const plantSaves = await PlantSave.find({ userId: new Types.ObjectId(userId) }, {});
 
     if (!user || !plantSaves) {
       return res.status(404).json({ message: 'Usuário não encontrado.' });

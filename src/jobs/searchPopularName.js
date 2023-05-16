@@ -1,4 +1,4 @@
-const { popularName } = require('../services/gtp');
+const { popularName } = require('../services/useGpt');
 
 module.exports = {
   key: 'SearchPopularName',

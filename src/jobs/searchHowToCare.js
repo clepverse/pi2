@@ -1,4 +1,4 @@
-const { howToCare } = require('../services/gtp');
+const { howToCare } = require('../services/useGpt');
 
 module.exports = {
   key: 'SearchHowToCare',

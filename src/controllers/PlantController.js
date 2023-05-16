@@ -7,8 +7,8 @@ const Queue = require('../lib/Queue');
 const Plant = require('../models/Plant');
 const PlantSave = require('../models/PlantSave');
 
-const createPlantValidator = require('../Validations/Plant/createPlantValidator');
-const createPlantSaveValidator = require('../Validations/PlantSave/createPlantSaveValidator');
+const createPlantValidator = require('../validators/Plant/createPlantValidator');
+const createPlantSaveValidator = require('../validators/PlantSave/createPlantSaveValidator');
 
 exports.index = async (req, res) => {
   try {

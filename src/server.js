@@ -31,10 +31,10 @@ const port = process.env.PORT || 3333;
 
 database.once('open', () => {
   app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Servidor está rodando na porta: ${port}`);
   });
 });
 
 database.on('error', (error) => {
-  console.error('Error connecting to database', error);
+  console.error('Erro ao conectar a DB', error);
 });

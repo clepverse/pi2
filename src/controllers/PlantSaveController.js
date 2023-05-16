@@ -5,8 +5,8 @@ const yup = require('yup');
 const PlantSave = require('../models/PlantSave');
 const DiaryEntry = require('../models/DiaryEntry');
 
-const editPlantSaveValidator = require('../Validations/PlantSave/editPlantSaveValidator');
-// const createDiaryEntryValidator = require('../Validations/DiaryEntry/createDiaryEntryValidator');
+const editPlantSaveValidator = require('../validators/PlantSave/editPlantSaveValidator');
+// const createDiaryEntryValidator = require('../validators/DiaryEntry/createDiaryEntryValidator');
 
 exports.index = async (req, res) => {
   const { userId } = req;

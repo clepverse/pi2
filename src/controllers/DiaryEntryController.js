@@ -5,7 +5,7 @@ const yup = require('yup');
 const PlantSave = require('../models/PlantSave');
 const DiaryEntry = require('../models/DiaryEntry');
 
-const createDiaryEntryValidator = require('../Validations/DiaryEntry/createDiaryEntryValidator');
+const createDiaryEntryValidator = require('../validators/DiaryEntry/createDiaryEntryValidator');
 
 exports.index = async (req, res) => {
   const { plantId } = req.params;
@@ -37,12 +37,11 @@ exports.save = async (req, res) => {
 
     const diaryEntryValidated = await diaryEntrySchema.validate(data);
 
-    const diaryEntryId = await DiaryEntry.upsertOne(
-      plantId,
-      diaryEntryValidated,
-    ).then((entryId) => {
-      return entryId;
-    });
+    const diaryEntryId = await DiaryEntry.upsertOne(plantId, diaryEntryValidated).then(
+      (entryId) => {
+        return entryId;
+      },
+    );
 
     const updatedPlant = await PlantSave.findOneAndUpdate(
       { _id: plantId },
@@ -70,9 +69,7 @@ exports.delete = async (req, res) => {
     }
 
     if (!isValidObjectId(diaryEntryId)) {
-      return res
-        .status(400)
-        .json({ message: 'ID de entrada de diário inválido.' });
+      return res.status(400).json({ message: 'ID de entrada de diário inválido.' });
     }
 
     const deletedDiaryEntry = await DiaryEntry.findOneAndDelete({
@@ -80,9 +77,7 @@ exports.delete = async (req, res) => {
     });
 
     if (!deletedDiaryEntry) {
-      return res
-        .status(400)
-        .json({ message: 'Entrada de diário não encontrada.' });
+      return res.status(400).json({ message: 'Entrada de diário não encontrada.' });
     }
 
     const updatedPlant = await PlantSave.findOneAndUpdate(

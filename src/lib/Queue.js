@@ -1,5 +1,5 @@
 const Queue = require('bull');
-const redisConfig = require('../config/redis');
+const redisConfig = require('../configs/redis');
 const jobs = require('../jobs');
 
 const queues = Object.values(jobs).map((job) => ({

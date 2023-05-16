@@ -1,8 +1,7 @@
-const salt = require('../config/salt');
+const security = require('../configs/security');
 
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
-const { expiresIn } = require('../config/salt');
 
 module.exports = (allow) => async (req, res, next) => {
   if (allow && !req.headers.authorization) return next();
@@ -26,7 +25,7 @@ module.exports = (allow) => async (req, res, next) => {
   }
 
   try {
-    await promisify(jwt.verify)(token, salt.secret, salt.expiresIn)
+    await promisify(jwt.verify)(token, security.secret, security.expiresIn)
       .then((decoded) => (req.userId = decoded.id))
       .catch(() => {
         throw new Error('Token inválido');

@@ -1,4 +1,4 @@
-const { scientificName } = require('../services/gtp');
+const { scientificName } = require('../services/useGpt');
 
 module.exports = {
   key: 'SearchScientificName',
