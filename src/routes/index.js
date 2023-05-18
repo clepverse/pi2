@@ -6,9 +6,9 @@ const diaryEntryRouter = require('./diaryEntry.routes');
 
 const routes = express.Router();
 
-routes.use('/api/user', userRouter);
-routes.use('/api/plant/', plantRouter);
-routes.use('/api/save/', plantSaveRouter);
-routes.use('/api/diary/', diaryEntryRouter);
+routes.use('/user', userRouter);
+routes.use('/plant/', plantRouter);
+routes.use('/save/', plantSaveRouter);
+routes.use('/diary/', diaryEntryRouter);
 
 module.exports = routes;
