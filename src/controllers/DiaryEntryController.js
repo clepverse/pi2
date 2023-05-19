@@ -15,7 +15,11 @@ exports.index = async (req, res) => {
       return res.status(400).json({ message: 'ID de planta inválido.' });
     }
 
-    const plant = await PlantSave.findById(plantId).populate('diaryentries');
+    const plant = await PlantSave.findById(plantId, 'diaryEntriesId').populate({
+      path: 'diaryEntriesId',
+      select: 'title date',
+      options: { sort: { createdAt: 1 } },
+    });
 
     res.status(200).json(plant);
   } catch (error) {
