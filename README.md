@@ -177,16 +177,16 @@
 #### Rota de DELETAR diaryEntry pelo ID da planta - Retorna mensagem de planta deletada.
 
 ```http
-  PUT /api/diary/save/:plantId
+  DELETE /api/diary/save/:plantId
 ```
 
 | Req.params    | Tipo | Descrição                                                             |
 | :------------ | :--- | :-------------------------------------------------------------------- |
-| `plantSaveId` | `id` | **Obrigatório**. ID da planta salva que quer adicionar/editar diario. |
+| `plantSaveId` | `id` | **Obrigatório**. ID da planta salva que quer adicionar/editar diário. |
 
 | Req.body       | Tipo | Descrição                                           |
 | :------------- | :--- | :-------------------------------------------------- |
-| `diaryEntryId` | `id` | **Obrigatório**. ID do diario que vai ser deletado. |
+| `diaryEntryId` | `id` | **Obrigatório**. ID do diário que vai ser deletado. |
 
 | Auth    | Tipo     | Descrição                                 |
 | :------ | :------- | :---------------------------------------- |
