@@ -2,10 +2,10 @@ const DB = require('../configs/db');
 
 const mongoose = require('mongoose');
 
-const mongoURL = `mongodb://localhost:${process.env.MONGO_CONTAINER_PORT}/${process.env.MONGO_DATABASE_NAME}`;
+// const mongoURL = `mongodb://localhost:${process.env.MONGO_CONTAINER_PORT}/${process.env.MONGO_DATABASE_NAME}`;
 
 mongoose
-  .connect(mongoURL, {
+  .connect(DB, {
     useNewUrlParser: true,
   })
   .then(() => {
