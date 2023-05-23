@@ -10,7 +10,7 @@ const PlantSave = require('../models/PlantSave');
 const createPlantValidator = require('../validators/Plant/createPlantValidator');
 const createPlantSaveValidator = require('../validators/PlantSave/createPlantSaveValidator');
 
-exports.index = async (req, res) => {
+exports.getAll = async (req, res) => {
   try {
     const plants = await Plant.find({});
 

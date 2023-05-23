@@ -7,7 +7,7 @@ const DiaryEntry = require('../models/DiaryEntry');
 
 const createDiaryEntryValidator = require('../validators/DiaryEntry/createDiaryEntryValidator');
 
-exports.index = async (req, res) => {
+exports.getAll = async (req, res) => {
   const { plantId } = req.params;
 
   try {

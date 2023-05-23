@@ -4,9 +4,9 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js && node src/queue.js",
     "server:start": "nodemon src/server.js",
     "queue:start": "nodemon src/queue.js",
+    "start": "node src/server.js && node src/queue.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

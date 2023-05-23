@@ -8,7 +8,7 @@ const DiaryEntry = require('../models/DiaryEntry');
 const editPlantSaveValidator = require('../validators/PlantSave/editPlantSaveValidator');
 // const createDiaryEntryValidator = require('../validators/DiaryEntry/createDiaryEntryValidator');
 
-exports.index = async (req, res) => {
+exports.getAll = async (req, res) => {
   const { userId } = req;
 
   try {

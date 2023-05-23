@@ -10,7 +10,7 @@ const createUserValidator = require('../validators/User/createUserValidator');
 const loginUserValidator = require('../validators/User/loginUserValidator');
 const editUserValidator = require('../validators/User/editUserValidator');
 
-exports.index = async (req, res) => {
+exports.getAll = async (req, res) => {
   try {
     const users = await User.find();
 
